@@ -2,3 +2,6 @@ shell_complete
 test_llm
 *.o
 *.dSYM
+test_llm
+shell_complete
+.idea

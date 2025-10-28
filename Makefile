@@ -1,15 +1,16 @@
 CXX = g++
 CXXFLAGS = -std=c++11 -Wall -O2
+LDFLAGS = -lcurl
 TARGET = shell_complete
 TEST_TARGET = test_llm
 
 all: $(TARGET)
 
 $(TARGET): shell_complete.cpp
-	$(CXX) $(CXXFLAGS) -o $(TARGET) shell_complete.cpp
+	$(CXX) $(CXXFLAGS) -o $(TARGET) shell_complete.cpp $(LDFLAGS)
 
 $(TEST_TARGET): test_llm.cpp
-	$(CXX) $(CXXFLAGS) -o $(TEST_TARGET) test_llm.cpp
+	$(CXX) $(CXXFLAGS) -o $(TEST_TARGET) test_llm.cpp $(LDFLAGS)
 
 test: $(TEST_TARGET)
 	./$(TEST_TARGET)

@@ -56,11 +56,11 @@ zle -N _llm_complete_widget
 zle -N _llm_suggest_widget
 
 # Bind to keyboard shortcuts
-# Ctrl+Space for inline completion
-bindkey '^ ' _llm_complete_widget
+# Ctrl+Z for inline completion
+bindkey '^Z' _llm_complete_widget
 # Ctrl+X Ctrl+L for suggestions
 bindkey '^X^L' _llm_suggest_widget
 
 echo "LLM shell completion loaded!"
-echo "  Ctrl+Space: Replace current line with LLM suggestion"
+echo "  Ctrl+Z: Replace current line with LLM suggestion"
 echo "  Ctrl+X Ctrl+L: Show LLM suggestion below prompt"
