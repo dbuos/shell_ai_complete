@@ -1,3 +1,4 @@
 shell_complete
+test_llm
 *.o
 *.dSYM

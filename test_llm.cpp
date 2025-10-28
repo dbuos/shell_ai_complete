@@ -58,6 +58,7 @@ std::string call_llm(const std::string& command_line) {
     if (pid == 0) {
         close(pipefd[0]);
         dup2(pipefd[1], STDOUT_FILENO);
+        dup2(pipefd[1], STDERR_FILENO);
         close(pipefd[1]);
 
         execlp("curl", "curl", "-s",
@@ -80,39 +81,57 @@ std::string call_llm(const std::string& command_line) {
         close(pipefd[0]);
 
         waitpid(pid, nullptr, 0);
-
-        // Parse JSON response to extract text
-        size_t text_pos = response.find("\"text\":");
-        if (text_pos != std::string::npos) {
-            size_t start = response.find('"', text_pos + 7);
-            if (start != std::string::npos) {
-                size_t end = response.find('"', start + 1);
-                if (end != std::string::npos) {
-                    return response.substr(start + 1, end - start - 1);
-                }
-            }
-        }
+        return response;
     }
 
     return "";
 }
 
-int main(int argc, char* argv[]) {
-    if (argc < 2) {
-        std::cerr << "Usage: " << argv[0] << " <partial_command>" << std::endl;
+std::string extract_text(const std::string& response) {
+    size_t text_pos = response.find("\"text\":");
+    if (text_pos != std::string::npos) {
+        size_t start = response.find('"', text_pos + 7);
+        if (start != std::string::npos) {
+            size_t end = response.find('"', start + 1);
+            if (end != std::string::npos) {
+                return response.substr(start + 1, end - start - 1);
+            }
+        }
+    }
+    return "";
+}
+
+int main() {
+    std::cout << "Testing LLM invocation with Claude Haiku 4.5...\n" << std::endl;
+
+    std::cout << "Test 1: Simple completion" << std::endl;
+    std::cout << "Input: 'find all pdf files'" << std::endl;
+    std::string response1 = call_llm("find all pdf files");
+    std::string result1 = extract_text(response1);
+    std::cout << "Result: " << result1 << std::endl;
+    std::cout << std::endl;
+
+    std::cout << "Test 2: Command correction" << std::endl;
+    std::cout << "Input: 'list files in current dir'" << std::endl;
+    std::string response2 = call_llm("list files in current dir");
+    std::string result2 = extract_text(response2);
+    std::cout << "Result: " << result2 << std::endl;
+    std::cout << std::endl;
+
+    std::cout << "Test 3: Complex command" << std::endl;
+    std::cout << "Input: 'compress all log files'" << std::endl;
+    std::string response3 = call_llm("compress all log files");
+    std::string result3 = extract_text(response3);
+    std::cout << "Result: " << result3 << std::endl;
+    std::cout << std::endl;
+
+    if (!result1.empty() && !result2.empty() && !result3.empty()) {
+        std::cout << "All tests passed! LLM is working correctly." << std::endl;
+        return 0;
+    } else {
+        std::cout << "Some tests failed. Check API key and connectivity." << std::endl;
+        std::cout << "\nRaw response from last test:" << std::endl;
+        std::cout << response3 << std::endl;
         return 1;
     }
-
-    std::string command_line;
-    for (int i = 1; i < argc; ++i) {
-        if (i > 1) command_line += " ";
-        command_line += argv[i];
-    }
-
-    std::string completion = call_llm(command_line);
-    if (!completion.empty()) {
-        std::cout << completion << std::endl;
-    }
-
-    return 0;
 }
