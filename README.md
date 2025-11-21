@@ -1,10 +1,10 @@
 # Shell Complete - LLM-Powered Shell Autocompletion
 
-Intelligent shell command completion and correction using Claude AI.
+Intelligent shell command completion and correction using Cerebras.
 
 ## Features
 
-- Real-time command completion using Claude LLM
+- Real-time command completion using Cerebras
 - Inline replacement of current command
 - Command suggestions and corrections
 - Simple C++ implementation with zsh integration
@@ -14,7 +14,7 @@ Intelligent shell command completion and correction using Claude AI.
 - C++ compiler (g++ or clang++)
 - zsh shell
 - curl
-- Anthropic API key
+- Cerebras API key
 
 ## Installation
 
@@ -23,9 +23,9 @@ Intelligent shell command completion and correction using Claude AI.
 make
 ```
 
-2. Set your Anthropic API key:
+2. Set your Cerebras API key (Set it on ~/.zshrc):
 ```bash
-export ANTHROPIC_API_KEY='your-api-key-here'
+export CEREBRAS_API_KEY='your-api-key-here'
 ```
 
 3. Add to your `~/.zshrc`:
@@ -42,7 +42,7 @@ source ~/.zshrc
 
 ### Keyboard Shortcuts
 
-- **Ctrl+Space**: Replace current command line with LLM completion
+- **Ctrl+Z**: Replace current command line with LLM completion
 - **Ctrl+X Ctrl+L**: Show LLM suggestion below prompt
 
 ### Examples
@@ -61,7 +61,7 @@ find . -name "*.pdf"
 
 1. The zsh widget captures your current command line
 2. Sends it to the C++ program
-3. The program calls Claude API for intelligent completion
+3. The program calls Cerebras API (gpt-oss) for intelligent completion
 4. The completion is inserted back into your shell
 
 ## Cleanup
